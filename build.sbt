@@ -1,0 +1,1 @@
+name := "fp-in-scala"
