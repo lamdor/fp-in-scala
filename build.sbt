@@ -1,6 +1,5 @@
 name := "fp-in-scala"
 
 initialCommands in console := """
-import ch3._
-import Tree._
+import ch4_either._
 """
