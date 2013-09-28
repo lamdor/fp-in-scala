@@ -1,5 +1,6 @@
 name := "fp-in-scala"
 
 initialCommands in console := """
-import ch5._
+import ch6._
+import CandyDispenser._
 """
