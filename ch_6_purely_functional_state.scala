@@ -227,6 +227,11 @@ object ch6 {
         m <- get
       } yield (m.coins, m.candies)
     }
+    // or
+    // State { (m: Machine) =>
+    //   val updated = inputs.foldLeft(m)(_ withInput _)
+    //   (updated.coins, updated.candies)
+    // }
 
     val testInputs =
       List(
