@@ -1,7 +1,6 @@
 name := "fp-in-scala"
 
 initialCommands in console := """
-import ch7._
-import Par._
-import java.util.concurrent._
+import ch8._
+import ch6._
 """
