@@ -88,7 +88,21 @@ object ch8 {
       } yield a
     }
 
-    def int: Gen[Int] = Gen.choose(Int.MinValue, Int.MaxValue)
+    def int: Gen[Int] =
+      (Gen.choose(0, Int.MaxValue) ** Gen.boolean) map {
+        case (i, true) => -i
+        case (i, _)    =>  i
+      }
+
+    def bigDecimal: Gen[BigDecimal] =
+      (int ** int) map { case(i1, i2) => BigDecimal(i1) / i2 }
+
+    def char: Gen[Char] = Gen.choose(Char.MinValue, Char.MaxValue).map(_.toChar)
+
+    def string: Gen[String] = char.listOfN(choose(0, 100)).map(_.mkString)
+
+    implicit def `SGen to Gen`[A](sgen: SGen[A]): Gen[A] =
+      choose(0, 10) flatMap sgen.forSize
   }
 
   case class SGen[+A](forSize: Int => Gen[A]) { self =>
