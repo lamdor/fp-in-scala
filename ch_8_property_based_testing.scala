@@ -101,6 +101,12 @@ object ch8 {
 
     def string: Gen[String] = char.listOfN(choose(0, 100)).map(_.mkString)
 
+    def option[A](gen: Gen[A]): Gen[Option[A]] =
+      Gen.union(gen.map(Some.apply), Gen.unit(None))
+
+    def endoIntFunction: Gen[Int => Int] =
+      Gen.int map { gi => (i => i + gi) }
+
     implicit def `SGen to Gen`[A](sgen: SGen[A]): Gen[A] =
       choose(0, 10) flatMap sgen.forSize
   }

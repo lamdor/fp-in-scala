@@ -127,6 +127,7 @@ object ch7 {
 
   val to100 = (1 to 100).toIndexedSeq
   lazy val es: ExecutorService = Executors.newFixedThreadPool(20)
+  def esShutdown = es.shutdown
 
   def sortPar(l: Par[List[Int]]): Par[List[Int]] =
     map(l)(_.sorted)
