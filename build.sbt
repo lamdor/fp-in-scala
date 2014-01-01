@@ -3,6 +3,5 @@ name := "fp-in-scala"
 initialCommands in console := """
 import ch7._
 import ch8._
-import ch11._
-import Monad._
+import ch12._
 """
