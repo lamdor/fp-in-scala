@@ -180,6 +180,14 @@ object ch12 {
       def unit[A](a: => A): F[G[A]] = F.unit(G.unit(a))
     }
 
+  // exercise 10
+  // def composeMonads[F[_], G[_]](F: Monad[F], G: Monad[G]): Monad[({type l[x] = F[G[x]]})#l] =
+  //   new Monad[({type l[x] = F[G[x]]})#l] {
+  //     def unit[A](a: => A): F[G[A]] = F.unit(G.unit(a))
+  //     def flatMap[A, B](fa: F[G[A]])(f: A => F[G[B]]): F[G[B]] =
+  //       F.map(ga => ga.map(f))
+  //   }
+
   trait Traverse[F[_]] extends Functor[F]  with Foldable[F]{
     def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]] =
       sequence(map(fa)(f))
@@ -252,7 +260,7 @@ object ch12 {
 
     // exercise 17 (cheated)
     def fuse[G[_],H[_],A,B](fa: F[A])(f: A => G[B], h: A => H[B])
-                           (G: Applicative[G], H: Applicative[H]): (G[F[B]], H[F[B]]) =
+            (G: Applicative[G], H: Applicative[H]): (G[F[B]], H[F[B]]) =
       traverse[({type l[x] = (G[x], H[x])})#l,A,B](fa)(a => (f(a), h(a)))(productApplicative(G,H))
 
     // exercise 18 :(
@@ -324,7 +332,7 @@ object ch12 {
         def op(ba1: (B, Option[A]), ba2: (B, Option[A])) = {
           val (b1, a1) = ba1
           val (b2, a2) = ba2
-          (a1, a2) match {
+            (a1, a2) match {
             case (Some(a1), Some(a2)) => (f(b1,a1), Some(a2))
             case _ => zero
           }
@@ -356,9 +364,10 @@ object ch12 {
 
   case class OptionT[M[_], A](value: M[Option[A]])(implicit M: Monad[M]) {
     def flatMap[B](f: A => OptionT[M,B]): OptionT[M,B] =
-      OptionT(M.flatMap(value) { 
+      OptionT(M.flatMap(value) {
                 case None => M.unit(None)
                 case Some(a) => f(a).value
               })
   }
+
 }
